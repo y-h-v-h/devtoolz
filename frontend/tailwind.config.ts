@@ -34,6 +34,9 @@ module.exports = {
         sans: ["var(--font-sans)", "Inter", "sans-serif"],
         "jetbrains-mono": ["var(--font-jetbrains-mono)"],
       },
+      colors: {
+        brand: "#ff8362",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

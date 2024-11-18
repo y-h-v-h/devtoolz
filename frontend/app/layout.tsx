@@ -67,9 +67,7 @@ export default function RootLayout({
       <html lang="en" suppressHydrationWarning>
         <body className={`${JetBrainsMono.className}`}>
           <Provider attribute="class" defaultTheme="system" enableSystem>
-            <main
-              className={`bg-white text-xs text-zinc-700 dark:bg-black dark:text-zinc-400`}
-            >
+            <main className={`min-h-screen bg-[#111113] text-xs text-zinc-300`}>
               {children}
             </main>
           </Provider>
