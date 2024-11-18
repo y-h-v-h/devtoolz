@@ -1,39 +1,20 @@
 import "./globals.css";
 
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { JetBrains_Mono } from "next/font/google";
+import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
 
 import { Provider } from "@/components/provider";
 
-const spaceMono = localFont({
-  src: [
-    {
-      path: "../public/fonts/space-mono/SpaceMono-Regular.ttf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/space-mono/SpaceMono-Italic.ttf",
-      weight: "400",
-      style: "italic",
-    },
-    {
-      path: "../public/fonts/space-mono/SpaceMono-Bold.ttf",
-      weight: "700",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/space-mono/SpaceMono-BoldItalic.ttf",
-      weight: "700",
-      style: "italic",
-    },
-  ],
+const JetBrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Kaminari",
+  title: "2oolz",
   generator: "Next.js",
-  applicationName: "Kaminari",
+  applicationName: "2oolz",
   referrer: "origin-when-cross-origin",
   keywords: [
     "Next.js",
@@ -43,29 +24,26 @@ export const metadata: Metadata = {
     "Template",
     "shadcn-ui",
   ],
-  authors: [{ name: "Virgil", url: "https://obedd.vercel.app" }],
-  creator: "Virgil",
-  publisher: "Virgil",
   alternates: {},
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://kaminari.vercel.app"),
+  metadataBase: new URL("https://2oolz.vercel.app"),
   openGraph: {
-    title: "Kaminari",
-    description: "Next.js, TailwindCSS and shadcn-ui Starter Template",
-    url: "https://kaminari.vercel.app",
-    siteName: "Kaminari",
+    title: "200lz",
+    description: "2oolz for you",
+    url: "https://2oolz.vercel.app",
+    siteName: "2oolz",
     images: [
       {
-        url: "https://kaminari.vercel.app/og.png",
+        url: "https://2oolz.vercel.app/og.png",
         width: 800,
         height: 600,
       },
       {
-        url: "https://kaminari.vercel.app/og-dark.png",
+        url: "https://2oolz.vercel.app/og-dark.png",
         width: 1800,
         height: 1600,
         alt: "Next.js, TailwindCSS and shadcn-ui Starter Template",
@@ -85,16 +63,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${spaceMono.className}`}>
-        <Provider attribute="class" defaultTheme="system" enableSystem>
-          <main
-            className={`bg-white text-zinc-700 dark:bg-black dark:text-zinc-400`}
-          >
-            {children}
-          </main>
-        </Provider>
-      </body>
-    </html>
+    <ConvexAuthNextjsServerProvider>
+      <html lang="en" suppressHydrationWarning>
+        <body className={`${JetBrainsMono.className}`}>
+          <Provider attribute="class" defaultTheme="system" enableSystem>
+            <main
+              className={`bg-white text-xs text-zinc-700 dark:bg-black dark:text-zinc-400`}
+            >
+              {children}
+            </main>
+          </Provider>
+        </body>
+      </html>
+    </ConvexAuthNextjsServerProvider>
   );
 }

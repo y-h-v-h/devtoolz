@@ -1,0 +1,16 @@
+{
+  "name": "2oolz",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client": "cd frontend && npm run dev",
+    "modus": "cd modus && modus dev",
+    "install:frontend": "cd frontend && pnpm install",
+    "install:modus": "cd modus && pnpm install",
+    "install:all": "cd frontend && pnpm install && cd ../modus && pnpm install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

@@ -1,5 +1,5 @@
 {
-  "name": "kaminari",
+  "name": "2oolz",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,6 +11,8 @@
     "test:ci": "jest --ci"
   },
   "dependencies": {
+    "@auth/core": "^0.36.0",
+    "@convex-dev/auth": "^0.0.74",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@types/node": "22.8.4",
@@ -19,10 +21,11 @@
     "autoprefixer": "10.4.20",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "convex": "^1.17.0",
     "eslint": "9.13.0",
     "eslint-config-next": "15.0.2",
     "framer-motion": "^11.11.10",
-    "next": "15.0.2",
+    "next": "14.2.17",
     "next-themes": "^0.3.0",
     "postcss": "8.4.47",
     "react": "18.3.1",
