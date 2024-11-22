@@ -3,8 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { api } from "@/convex/_generated/api";
-import { useAuthActions } from "@convex-dev/auth/react";
-import { useQuery } from "convex/react";
 import { ArrowUpDown, CircleDotDashed, Key } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -23,8 +21,6 @@ import Nav from "@/components/nav";
 import Settings from "@/components/settings";
 
 export default function Git() {
-  const user = useQuery(api.user.viewer);
-  const { signIn } = useAuthActions();
   const [reordered, setReordered] = useState(false);
 
   return (
@@ -58,7 +54,7 @@ export default function Git() {
           </div>
         </div>
         <div className="mx-auto w-full max-w-4xl">
-          <Button className="bg-brand mr-5 h-9 w-full text-black hover:bg-[#f8633b]">
+          <Button className="mr-5 h-9 w-full bg-brand text-black hover:bg-[#f8633b]">
             <CircleDotDashed size={18} className="mr-2" />
             Generate
           </Button>

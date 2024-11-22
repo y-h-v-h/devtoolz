@@ -64,16 +64,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ConvexAuthNextjsServerProvider>
-      <html lang="en" suppressHydrationWarning>
-        <body className={`${JetBrainsMono.className}`}>
-          <Provider attribute="class" defaultTheme="system" enableSystem>
-            <main className={`min-h-screen bg-[#111113] text-xs text-zinc-300`}>
-              {children}
-            </main>
-          </Provider>
-        </body>
-      </html>
-    </ConvexAuthNextjsServerProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${JetBrainsMono.className}`}>
+        <Provider attribute="class" defaultTheme="system" enableSystem>
+          <main className={`min-h-screen bg-[#111113] text-xs text-zinc-300`}>
+            {children}
+          </main>
+        </Provider>
+      </body>
+    </html>
   );
 }

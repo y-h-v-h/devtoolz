@@ -26,6 +26,7 @@ export default function Settings({
       <div className="flex flex-col">
         <Label className="mb-5 text-sm text-zinc-500"></Label>
         <Button
+          type="button"
           onClick={() => setReordered(!reordered)}
           className="mr-5 h-9 bg-zinc-800 hover:bg-[#111113]"
         >
@@ -72,31 +73,31 @@ export default function Settings({
               <SelectContent className="border-2 border-zinc-800 bg-zinc-800 text-zinc-200">
                 <SelectItem
                   value="programmer"
-                  className="focus:bg-brand hover:bg-brand hover:text-black focus:text-black"
+                  className="hover:bg-brand hover:text-black focus:bg-brand focus:text-black"
                 >
                   Programmer
                 </SelectItem>
                 <SelectItem
                   value="grandma"
-                  className="focus:bg-brand hover:bg-brand hover:text-black focus:text-black"
+                  className="hover:bg-brand hover:text-black focus:bg-brand focus:text-black"
                 >
                   Grandma
                 </SelectItem>
                 <SelectItem
                   value="rapper"
-                  className="focus:bg-brand hover:bg-brand hover:text-black focus:text-black"
+                  className="hover:bg-brand hover:text-black focus:bg-brand focus:text-black"
                 >
                   Rapper
                 </SelectItem>
                 <SelectItem
                   value="cowboy"
-                  className="focus:bg-brand hover:bg-brand hover:text-black focus:text-black"
+                  className="hover:bg-brand hover:text-black focus:bg-brand focus:text-black"
                 >
                   Cowboy
                 </SelectItem>
                 <SelectItem
                   value="robot"
-                  className="focus:bg-brand hover:bg-brand hover:text-black focus:text-black"
+                  className="hover:bg-brand hover:text-black focus:bg-brand focus:text-black"
                 >
                   Robot
                 </SelectItem>

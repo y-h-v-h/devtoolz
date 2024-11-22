@@ -27,7 +27,8 @@ export function convertNaturalLanguageToRegex(
       `Convert this natural language to regex: ${naturalLanguage}.
       Do not add your own comments. Return only the regex -
       do not include any other comments, information, context, or explanation.
-      Do not format it into html or anything.`,
+      Do not format it into html or anything, or wrap in quotes or a string. Just 
+      return the regex.`,
     ),
   ]);
 

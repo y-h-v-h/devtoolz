@@ -2,9 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { api } from "@/convex/_generated/api";
-import { useAuthActions } from "@convex-dev/auth/react";
-import { useQuery } from "convex/react";
 import {
   ArrowUpDown,
   CircleDotDashed,
@@ -30,22 +27,16 @@ import Nav from "@/components/nav";
 import SearchItem from "@/components/search-item";
 
 export default function SearchPage() {
-  const user = useQuery(api.user.viewer);
-  const { signIn } = useAuthActions();
-  const [reordered, setReordered] = useState(false);
-
   return (
     <section className="flex min-h-screen w-full flex-col items-stretch lg:flex-row">
       <section className="lg:pb- pb- flex min-w-0 flex-1 flex-col gap-8 border-r border-dashed border-r-zinc-800 bg-[#18181b] px-6 pt-10 lg:px-12">
         <Header />
 
-        <div
-          className={`mx-auto flex w-full max-w-4xl flex-col ${reordered ? "flex-col-reverse" : ""}`}
-        >
+        <div className={`mx-auto flex w-full max-w-4xl flex-col`}>
           <div className="flex flex-col">
             <Input
               className="mt-4 h-14 w-full rounded-xl border-2 border-zinc-900 bg-zinc-800 focus-visible:ring-zinc-900"
-              placeholder={`${reordered ? "Converted git command in natural language" : "What are you looking for?"}`}
+              placeholder={"What are you looking for?"}
             />
           </div>
           <div className="flex items-end justify-between">
@@ -58,25 +49,25 @@ export default function SearchPage() {
                 <SelectContent className="border-2 border-zinc-800 bg-zinc-800 text-zinc-200">
                   <SelectItem
                     value="natural-language"
-                    className="focus:bg-brand hover:bg-brand hover:text-black focus:text-black"
+                    className="hover:bg-brand hover:text-black focus:bg-brand focus:text-black"
                   >
                     Natural Language
                   </SelectItem>
                   <SelectItem
                     value="git-command"
-                    className="focus:bg-brand hover:bg-brand hover:text-black focus:text-black"
+                    className="hover:bg-brand hover:text-black focus:bg-brand focus:text-black"
                   >
                     Git Command
                   </SelectItem>
                   <SelectItem
                     value="regex"
-                    className="focus:bg-brand hover:bg-brand hover:text-black focus:text-black"
+                    className="hover:bg-brand hover:text-black focus:bg-brand focus:text-black"
                   >
                     Regex
                   </SelectItem>
                   <SelectItem
                     value="sql-query"
-                    className="focus:bg-brand hover:bg-brand hover:text-black focus:text-black"
+                    className="hover:bg-brand hover:text-black focus:bg-brand focus:text-black"
                   >
                     SQL Query
                   </SelectItem>
@@ -84,7 +75,7 @@ export default function SearchPage() {
               </Select>
             </div>
             <div className="mx-auto w-full max-w-4xl">
-              <Button className="bg-brand mr-5 h-9 w-full text-black hover:bg-[#f8633b]">
+              <Button className="mr-5 h-9 w-full bg-brand text-black hover:bg-[#f8633b]">
                 <Search size={18} className="mr-2" />
                 Search
               </Button>
