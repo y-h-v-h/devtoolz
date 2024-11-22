@@ -2,17 +2,18 @@ import "./globals.css";
 
 import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
 
 import { Provider } from "@/components/provider";
 
-const JetBrainsMono = JetBrains_Mono({
+const JetBrainsMono = localFont({
+  src: "../public/fonts/JetBrainsMono-VariableFont.ttf",
   variable: "--font-jetbrains-mono",
-  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "2oolz",
+  title: "Devtoolz",
   generator: "Next.js",
   applicationName: "2oolz",
   referrer: "origin-when-cross-origin",

@@ -4,16 +4,10 @@
 
 ::-moz-selection {
   color: #000;
-  background-color: #99f6e4;
+  background-color: #ff8362;
 }
 
 ::selection {
   color: #000;
-  background: #99f6e4;
-}
-.stroked {
-  -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 1px;
-  color: rgb(177, 177, 177);
-  -webkit-font-smoothing: antialiased;
+  background: #ff8362;
 }
