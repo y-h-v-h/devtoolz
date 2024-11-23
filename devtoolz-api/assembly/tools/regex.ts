@@ -2,19 +2,19 @@ import { models, collections } from "@hypermode/modus-sdk-as";
 
 import {
   OpenAIChatModel,
-  ResponseFormat,
   SystemMessage,
   UserMessage,
 } from "@hypermode/modus-sdk-as/models/openai/chat";
-import { EmbeddingsModel } from "@hypermode/modus-sdk-as/models/experimental/embeddings";
 
 import {
-  DEFAULT_EMBEDDING_MODEL_NAME,
   DEFAULT_MODEL_NAME,
   NATURAL_LANGUAGE_COLLECTION_NAME,
   REGEX_COLLECTION_NAME,
 } from "../lib/constants";
-import { NaturalLanguageToRegexResult } from "../lib/types";
+import {
+  NaturalLanguageToRegexResult,
+  RegexToNaturalLanguageResult,
+} from "../lib/types";
 
 export function convertNaturalLanguageToRegex(
   instruction: string,
@@ -28,7 +28,8 @@ export function convertNaturalLanguageToRegex(
       Do not add your own comments. Return only the regex -
       do not include any other comments, information, context, or explanation.
       Do not format it into html or anything, or wrap in quotes or a string. Just 
-      return the regex.`,
+      return the regex. If there are any quotes in the regex, use single quotes
+      instead of double quotes. `,
     ),
   ]);
 
@@ -54,6 +55,46 @@ export function convertNaturalLanguageToRegex(
 
   return {
     regex: output.choices[0].message.content.trim(),
+    naturalLanguageCollectionMutationResult:
+      naturalLanguageCollectionMutationResult,
+    regexCollectionMutationResult: regexCollectionMutationResult,
+  };
+}
+
+export function convertRegexToNaturalLanguage(
+  instruction: string,
+  regex: string,
+): RegexToNaturalLanguageResult {
+  const model = models.getModel<OpenAIChatModel>(DEFAULT_MODEL_NAME);
+  const input = model.createInput([
+    new SystemMessage(instruction),
+    new UserMessage(
+      `Convert this regex to natural language: ${regex}.
+      Do not add your own comments. Return only the natural language -
+      do not include any other comments, information, context, or explanation.
+      Do not format it into html or anything, or wrap in quotes or a string. Just 
+      return the natural language. If there are any quotes in the natural language,
+      use single quotes instead of double quotes.`,
+    ),
+  ]);
+
+  input.temperature = 0.7;
+  const output = model.invoke(input);
+
+  const naturalLanguageCollectionMutationResult = collections.upsert(
+    NATURAL_LANGUAGE_COLLECTION_NAME,
+    null,
+    output.choices[0].message.content.trim(),
+  );
+
+  const regexCollectionMutationResult = collections.upsert(
+    REGEX_COLLECTION_NAME,
+    null,
+    regex,
+  );
+
+  return {
+    naturalLanguage: output.choices[0].message.content.trim(),
     naturalLanguageCollectionMutationResult:
       naturalLanguageCollectionMutationResult,
     regexCollectionMutationResult: regexCollectionMutationResult,

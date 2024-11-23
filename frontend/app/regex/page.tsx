@@ -13,7 +13,10 @@ import {
 import { set, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { naturalLanguageToRegexInstruction } from "@/lib/model-instructions";
+import {
+  naturalLanguageToRegexInstruction,
+  regexToNaturalLanguageInstruction,
+} from "@/lib/model-instructions";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import {
@@ -65,9 +68,40 @@ export default function Regex() {
     });
   };
   const naturalLanguageToRegexQuery = gql`
-    query ConvertNaturalLanguageToRegex {
-      convertNaturalLanguageToRegex(instruction: "${naturalLanguageToRegexInstruction}", naturalLanguage: "${naturalLanguage || ""}") {
+    query ConvertNaturalLanguageToRegex(
+      $instruction: String!
+      $naturalLanguage: String!
+    ) {
+      convertNaturalLanguageToRegex(
+        instruction: $instruction
+        naturalLanguage: $naturalLanguage
+      ) {
         regex
+        naturalLanguageCollectionMutationResult {
+          collection
+          status
+          error
+          operation
+          keys
+        }
+        regexCollectionMutationResult {
+          collection
+          status
+          error
+          operation
+          keys
+        }
+      }
+    }
+  `;
+
+  const regexToNaturalLanguageQuery = gql`
+    query ConvertRegexToNaturalLanguage(
+      $instruction: String!
+      $regex: String!
+    ) {
+      convertRegexToNaturalLanguage(instruction: $instruction, regex: $regex) {
+        naturalLanguage
         naturalLanguageCollectionMutationResult {
           collection
           status
@@ -89,18 +123,49 @@ export default function Regex() {
   const [convertNatuaralLanguageToRegex, { loading, data }] = useLazyQuery(
     naturalLanguageToRegexQuery,
     {
+      skipPollAttempt: () => reordered, // if any weird behavior, try removing this
+      variables: {
+        instruction: naturalLanguageToRegexInstruction,
+        naturalLanguage: naturalLanguage || "",
+      },
+
       onCompleted: (data) => {
-        console.log("Data on fetch: ", data);
+        console.log("Data on fetch (nlp to regex): ", data);
         form.setValue("regex", data.convertNaturalLanguageToRegex.regex);
       },
     }
   );
 
-  async function onSubmit(formData: z.infer<typeof FormSchema>) {
-    setNaturalLanguage(formData.naturalLanguage || "");
-    form.setValue("regex", "");
+  const [
+    convertRegexToNaturalLanguage,
+    { loading: regexLoading, data: regexData },
+  ] = useLazyQuery(regexToNaturalLanguageQuery, {
+    skipPollAttempt: () => !reordered,
+    variables: {
+      instruction: regexToNaturalLanguageInstruction,
+      regex: regex || "",
+    },
+    onCompleted: (data) => {
+      console.log("Data on fetch (regex to nlp): ", data);
+      form.setValue(
+        "naturalLanguage",
+        data.convertRegexToNaturalLanguage.naturalLanguage
+      );
+    },
+  });
 
-    await convertNatuaralLanguageToRegex();
+  async function onSubmit(formData: z.infer<typeof FormSchema>) {
+    if (reordered) {
+      console.log("Converting regex to natural language");
+      setRegex(formData.regex || "");
+      form.setValue("naturalLanguage", "");
+      await convertRegexToNaturalLanguage();
+    } else {
+      console.log("Converting natural language to regex");
+      setNaturalLanguage(formData.naturalLanguage || "");
+      form.setValue("regex", "");
+      await convertNatuaralLanguageToRegex();
+    }
   }
 
   // trim user input before sending
@@ -151,6 +216,12 @@ export default function Regex() {
                       />
                     </FormControl>
 
+                    {!reordered && (
+                      <FormDescription className="text-center">
+                        NB: If there are any quotes, use only single quotes
+                      </FormDescription>
+                    )}
+
                     <FormMessage />
                   </FormItem>
                 )}
@@ -193,9 +264,13 @@ export default function Regex() {
                         {...field}
                       />
                     </FormControl>
-                    {!reordered && (
+                    {!reordered ? (
                       <FormDescription className="text-center">
                         NB: Verify regex code before using
+                      </FormDescription>
+                    ) : (
+                      <FormDescription className="text-center">
+                        NB: If there are any quotes, use only single quotes
                       </FormDescription>
                     )}
                     <FormMessage />
@@ -204,18 +279,35 @@ export default function Regex() {
               />
             </div>
             <div className="mx-auto mt-10 w-full max-w-4xl">
-              <Button
-                type="submit"
-                disabled={loading}
-                className="mr-5 h-9 w-full bg-brand text-black hover:bg-[#f8633b]"
-              >
-                {loading ? (
-                  <Loader size={18} className="mr-2 animate-spin" />
-                ) : (
-                  <CircleDotDashed size={18} className="mr-2" />
-                )}
-                {loading ? "Converting..." : "Convert"}
-              </Button>
+              {reordered ? (
+                <Button
+                  type="submit"
+                  disabled={regexLoading}
+                  className="mr-5 h-9 w-full bg-brand text-black hover:bg-[#f8633b]"
+                >
+                  {regexLoading ? (
+                    <Loader size={18} className="mr-2 animate-spin" />
+                  ) : (
+                    <CircleDotDashed size={18} className="mr-2" />
+                  )}
+                  {regexLoading
+                    ? "Converting..."
+                    : "Convert to natural language"}
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="mr-5 h-9 w-full bg-brand text-black hover:bg-[#f8633b]"
+                >
+                  {loading ? (
+                    <Loader size={18} className="mr-2 animate-spin" />
+                  ) : (
+                    <CircleDotDashed size={18} className="mr-2" />
+                  )}
+                  {loading ? "Converting..." : "Convert to regex"}
+                </Button>
+              )}
             </div>
           </form>
         </section>
