@@ -9,26 +9,26 @@ import {
 import {
   SECOND_MODEL_NAME,
   NATURAL_LANGUAGE_COLLECTION_NAME,
-  REGEX_COLLECTION_NAME,
+  GIT_COMMAND_COLLECTION_NAME,
 } from "../lib/constants";
 import {
-  NaturalLanguageToRegexResult,
-  RegexToNaturalLanguageResult,
+  GitCommandToNaturalLanguageResult,
+  NaturalLanguageToGitCommandResult,
 } from "../lib/types";
 
-export function convertNaturalLanguageToRegex(
+export function convertNaturalLanguageToGitCommand(
   instruction: string,
   naturalLanguage: string,
-): NaturalLanguageToRegexResult {
+): NaturalLanguageToGitCommandResult {
   const model = models.getModel<OpenAIChatModel>(SECOND_MODEL_NAME);
   const input = model.createInput([
     new SystemMessage(instruction),
     new UserMessage(
-      `Convert this natural language to regex: ${naturalLanguage}.
-      Do not add your own comments. Return only the regex -
+      `Convert this natural language to a git command: ${naturalLanguage}.
+      Do not add your own comments. Return only the git command -
       do not include any other comments, information, context, or explanation.
       Do not format it into html or anything, or wrap in quotes or a string. Just 
-      return the regex. If there are any quotes in the regex, use single quotes
+      return the git command. If there are any quotes in the git command, use single quotes
       instead of double quotes. `,
     ),
   ]);
@@ -36,40 +36,36 @@ export function convertNaturalLanguageToRegex(
   input.temperature = 0.7;
   const output = model.invoke(input);
 
-  // embed the natural language and regex into collection
+  // embed the natural language and git command into collection
   const naturalLanguageCollectionMutationResult = collections.upsert(
-    NATURAL_LANGUAGE_COLLECTION_NAME, // Collection name defined in the manifest
-    null, // using null to let Modus generate a unique ID
-    naturalLanguage, // the text to store
-    // no labels for this item
-    // no namespace provided, use default namespace
+    NATURAL_LANGUAGE_COLLECTION_NAME,
+    null,
+    naturalLanguage,
   );
 
-  const regexCollectionMutationResult = collections.upsert(
-    REGEX_COLLECTION_NAME, // Collection name defined in the manifest
-    null, // using null to let Modus generate a unique ID
-    output.choices[0].message.content.trim(), // the text to store
-    // no labels for this item
-    // no namespace provided, use default namespace
+  const gitCommandCollectionMutationResult = collections.upsert(
+    GIT_COMMAND_COLLECTION_NAME,
+    null,
+    output.choices[0].message.content.trim(),
   );
 
   return {
-    regex: output.choices[0].message.content.trim(),
+    gitCommand: output.choices[0].message.content.trim(),
     naturalLanguageCollectionMutationResult:
       naturalLanguageCollectionMutationResult,
-    regexCollectionMutationResult: regexCollectionMutationResult,
+    gitCommandCollectionMutationResult: gitCommandCollectionMutationResult,
   };
 }
 
-export function convertRegexToNaturalLanguage(
+export function convertGitCommandToNaturalLanguage(
   instruction: string,
-  regex: string,
-): RegexToNaturalLanguageResult {
+  gitCommand: string,
+): GitCommandToNaturalLanguageResult {
   const model = models.getModel<OpenAIChatModel>(SECOND_MODEL_NAME);
   const input = model.createInput([
     new SystemMessage(instruction),
     new UserMessage(
-      `Convert this regex to natural language: ${regex}.
+      `Convert this git command to natural language: ${gitCommand}.
       Do not add your own comments. Return only the natural language -
       do not include any other comments, information, context, or explanation.
       Do not format it into html or anything, or wrap in quotes or a string. Just 
@@ -87,16 +83,16 @@ export function convertRegexToNaturalLanguage(
     output.choices[0].message.content.trim(),
   );
 
-  const regexCollectionMutationResult = collections.upsert(
-    REGEX_COLLECTION_NAME,
+  const gitCommandCollectionMutationResult = collections.upsert(
+    GIT_COMMAND_COLLECTION_NAME,
     null,
-    regex,
+    gitCommand,
   );
 
   return {
     naturalLanguage: output.choices[0].message.content.trim(),
     naturalLanguageCollectionMutationResult:
       naturalLanguageCollectionMutationResult,
-    regexCollectionMutationResult: regexCollectionMutationResult,
+    gitCommandCollectionMutationResult: gitCommandCollectionMutationResult,
   };
 }

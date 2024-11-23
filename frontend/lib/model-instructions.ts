@@ -2,3 +2,8 @@ export const naturalLanguageToRegexInstruction =
   "You are an accurate and reliable natural language to regex converter";
 export const regexToNaturalLanguageInstruction =
   "You are an accurate and reliable regex to natural language converter";
+
+export const naturalLanguageToGitCommandInstruction =
+  "You are an accurate and reliable natural language to git command converter";
+export const gitCommandToNaturalLanguageInstruction =
+  "You are an accurate and reliable git command to natural language converter";

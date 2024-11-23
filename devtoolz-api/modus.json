@@ -7,7 +7,21 @@
       "auth": "bearer-token"
     }
   },
+  "connections": {
+    "openai": {
+      "type": "http",
+      "baseUrl": "https://api.openai.com/",
+      "headers": {
+        "Authorization": "Bearer {{OPENAI_API_KEY}}"
+      }
+    }
+  },
   "models": {
+    "gpt-4o": {
+      "sourceModel": "gpt-4o",
+      "provider": "hugging-face",
+      "connection": "hypermode"
+    },
     "meta-llama-instruct-3-1-8B": {
       "sourceModel": "meta-llama/Meta-Llama-3.1-8B-Instruct",
       "provider": "hugging-face",
@@ -17,6 +31,11 @@
       "sourceModel": "sentence-transformers/all-MiniLM-L6-v2",  
       "provider": "hugging-face",
       "connection": "hypermode" 
+    },
+    "text-embedding-ada-002": {
+      "sourceModel": "text-embedding-ada-002",
+      "provider": "hugging-face",
+      "connection": "hypermode"
     }
   },
   "collections": {

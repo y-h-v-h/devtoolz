@@ -10,7 +10,7 @@ import {
   Loader,
   Loader2,
 } from "lucide-react";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import {
@@ -120,7 +120,7 @@ export default function Regex() {
     }
   `;
 
-  const [convertNatuaralLanguageToRegex, { loading, data }] = useLazyQuery(
+  const [convertNaturalLanguageToRegex, { loading, data }] = useLazyQuery(
     naturalLanguageToRegexQuery,
     {
       skipPollAttempt: () => reordered, // if any weird behavior, try removing this
@@ -164,7 +164,7 @@ export default function Regex() {
       console.log("Converting natural language to regex");
       setNaturalLanguage(formData.naturalLanguage || "");
       form.setValue("regex", "");
-      await convertNatuaralLanguageToRegex();
+      await convertNaturalLanguageToRegex();
     }
   }
 
@@ -310,22 +310,6 @@ export default function Regex() {
               )}
             </div>
           </form>
-        </section>
-
-        {/* second section */}
-        <section className="relative mt-20 shrink-0 overflow-hidden px-6 pb-10 lg:w-[400px] lg:min-w-[400px] lg:px-12 lg:py-14 xl:w-[500px]">
-          <h3 className="text-lg">Explanation</h3>
-          {/* can use dangerouslySetHTML here */}
-          <p className="py-2 text-sm leading-8 text-zinc-500">
-            17 years together no way Seymour is missing out on some oven fried
-            Catfish. He will stay with the food start to finish. He&apos;s in
-            kitchen right now watching it cook. The first of many he is very
-            sophisticated. I'm trying to build a simple blog site and want a
-            markdown editor. Which is the best markdown editor/library for
-            react? preferably something with Code support. I have kept this one
-            in mind, I was just looking if there was any other better library
-            that I'm not aware about. Thanks for the suggestion!
-          </p>
         </section>
       </section>
     </Form>
