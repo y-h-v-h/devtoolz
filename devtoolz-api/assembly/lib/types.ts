@@ -62,3 +62,35 @@ export class GitCommandToNaturalLanguageResult {
   @alias("git-command-collection-mutation-result")
   gitCommandCollectionMutationResult!: collections.CollectionMutationResult;
 }
+
+// SQL
+@json
+export class NaturalLanguageToSQLQueryResult {
+
+  @alias("sqlQuery")
+  sqlQuery!: string;
+
+
+  @alias("natural-language-collection-mutation-result")
+  naturalLanguageCollectionMutationResult!: collections.CollectionMutationResult;
+
+
+  @alias("sql-query-collection-mutation-result")
+  sqlQueryCollectionMutationResult!: collections.CollectionMutationResult;
+}
+
+
+@json
+export class SQLQueryToNaturalLanguageResult {
+
+  @alias("naturalLanguage")
+  naturalLanguage!: string;
+
+
+  @alias("natural-language-collection-mutation-result")
+  naturalLanguageCollectionMutationResult!: collections.CollectionMutationResult;
+
+
+  @alias("sql-query-collection-mutation-result")
+  sqlQueryCollectionMutationResult!: collections.CollectionMutationResult;
+}

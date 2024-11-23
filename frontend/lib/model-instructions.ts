@@ -7,3 +7,8 @@ export const naturalLanguageToGitCommandInstruction =
   "You are an accurate and reliable natural language to git command converter";
 export const gitCommandToNaturalLanguageInstruction =
   "You are an accurate and reliable git command to natural language converter";
+
+export const naturalLanguageToSQLQueryInstruction =
+  "You are an accurate and reliable natural language to SQL query converter";
+export const sqlQueryToNaturalLanguageInstruction =
+  "You are an accurate and reliable SQL query to natural language converter";

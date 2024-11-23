@@ -10,8 +10,6 @@ import { z } from "zod";
 import {
   gitCommandToNaturalLanguageInstruction,
   naturalLanguageToGitCommandInstruction,
-  naturalLanguageToRegexInstruction,
-  regexToNaturalLanguageInstruction,
 } from "@/lib/model-instructions";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -34,8 +32,6 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import Header from "@/components/header";
-import Logo from "@/components/logo";
-import Nav from "@/components/nav";
 import Settings from "@/components/settings";
 
 const FormSchema = z.object({

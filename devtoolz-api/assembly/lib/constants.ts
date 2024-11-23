@@ -4,7 +4,8 @@ export const DEFAULT_EMBEDDING_MODEL_NAME = "minilm";
 export const SECOND_EMBEDDING_MODEL_NAME = "minilm";
 export const NATURAL_LANGUAGE_COLLECTION_NAME = "nlp-collection";
 export const REGEX_COLLECTION_NAME = "regex-collection";
-export const GIT_COMMAND_COLLECTION_NAME = "regex-collection";
+export const GIT_COMMAND_COLLECTION_NAME = "git-collection";
+export const SQL_QUERY_COLLECTION_NAME = "sql-collection";
 
 // textarea:not([class]):not([style*='display:table']):not([style*='display:table-row-group'])[id][rows='6'][cols='2']
 
