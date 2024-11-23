@@ -1,15 +1,10 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { gql, useLazyQuery } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Check,
-  CircleDotDashed,
-  Clipboard,
-  Loader,
-  Loader2,
-} from "lucide-react";
+import { Check, CircleDotDashed, Clipboard, Loader } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -38,11 +33,18 @@ const FormSchema = z.object({
 });
 
 export default function Regex() {
+  const searchParams = useSearchParams();
   const { toast } = useToast();
   const [reordered, setReordered] = useState(false); // natural -> regex (true), meaning not reordered
   const [naturalLanguage, setNaturalLanguage] = useState("");
   const [regex, setRegex] = useState("");
   const [copied, setCopied] = useState(false);
+  const [existsInCollection, setExistsInCollection] = useState(false);
+
+  // used to check if the user was navigated from the /search route (has parameters)
+  // If so, the regex is already in the Modus Collection and need
+  // not be added again, to prevent duplicate items in collection
+  let regexInParams: string | null;
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -51,6 +53,19 @@ export default function Regex() {
       regex: regex,
     },
   });
+
+  useEffect(() => {
+    regexInParams = searchParams.get("regex");
+    if (regexInParams == null) {
+      return;
+    } else {
+      setReordered(true);
+      setRegex(regexInParams);
+      setExistsInCollection(true);
+      form.setValue("regex", regexInParams);
+      setNaturalLanguage("");
+    }
+  }, []);
 
   const handleCopy = async (type: string) => {
     const naturalLanguageText = form.getValues("naturalLanguage");
@@ -99,8 +114,13 @@ export default function Regex() {
     query ConvertRegexToNaturalLanguage(
       $instruction: String!
       $regex: String!
+      $regexIsInCollection: Boolean!
     ) {
-      convertRegexToNaturalLanguage(instruction: $instruction, regex: $regex) {
+      convertRegexToNaturalLanguage(
+        instruction: $instruction
+        regex: $regex
+        regexIsInCollection: $regexIsInCollection
+      ) {
         naturalLanguage
         naturalLanguageCollectionMutationResult {
           collection
@@ -144,6 +164,7 @@ export default function Regex() {
     variables: {
       instruction: regexToNaturalLanguageInstruction,
       regex: regex || "",
+      regexIsInCollection: existsInCollection,
     },
     onCompleted: (data) => {
       console.log("Data on fetch (regex to nlp): ", data);

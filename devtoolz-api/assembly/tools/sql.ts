@@ -60,6 +60,7 @@ export function convertNaturalLanguageToSQLQuery(
 export function convertSQLQueryToNaturalLanguage(
   instruction: string,
   sqlQuery: string,
+  sqlQueryIsInCollection: bool,
 ): SQLQueryToNaturalLanguageResult {
   const model = models.getModel<OpenAIChatModel>(SECOND_MODEL_NAME);
   const input = model.createInput([
@@ -77,22 +78,30 @@ export function convertSQLQueryToNaturalLanguage(
   input.temperature = 0.7;
   const output = model.invoke(input);
 
-  const naturalLanguageCollectionMutationResult = collections.upsert(
-    NATURAL_LANGUAGE_COLLECTION_NAME,
-    null,
-    output.choices[0].message.content.trim(),
-  );
+  if (sqlQueryIsInCollection) {
+    return {
+      naturalLanguage: output.choices[0].message.content.trim(),
+      naturalLanguageCollectionMutationResult: null,
+      sqlQueryCollectionMutationResult: null,
+    };
+  } else {
+    const naturalLanguageCollectionMutationResult = collections.upsert(
+      NATURAL_LANGUAGE_COLLECTION_NAME,
+      null,
+      output.choices[0].message.content.trim(),
+    );
 
-  const sqlQueryCollectionMutationResult = collections.upsert(
-    SQL_QUERY_COLLECTION_NAME,
-    null,
-    sqlQuery,
-  );
+    const sqlQueryCollectionMutationResult = collections.upsert(
+      SQL_QUERY_COLLECTION_NAME,
+      null,
+      sqlQuery,
+    );
 
-  return {
-    naturalLanguage: output.choices[0].message.content.trim(),
-    naturalLanguageCollectionMutationResult:
-      naturalLanguageCollectionMutationResult,
-    sqlQueryCollectionMutationResult: sqlQueryCollectionMutationResult,
-  };
+    return {
+      naturalLanguage: output.choices[0].message.content.trim(),
+      naturalLanguageCollectionMutationResult:
+        naturalLanguageCollectionMutationResult,
+      sqlQueryCollectionMutationResult: sqlQueryCollectionMutationResult,
+    };
+  }
 }

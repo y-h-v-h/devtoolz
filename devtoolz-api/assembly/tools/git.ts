@@ -60,6 +60,7 @@ export function convertNaturalLanguageToGitCommand(
 export function convertGitCommandToNaturalLanguage(
   instruction: string,
   gitCommand: string,
+  gitCommandIsInCollection: bool,
 ): GitCommandToNaturalLanguageResult {
   const model = models.getModel<OpenAIChatModel>(SECOND_MODEL_NAME);
   const input = model.createInput([
@@ -77,22 +78,30 @@ export function convertGitCommandToNaturalLanguage(
   input.temperature = 0.7;
   const output = model.invoke(input);
 
-  const naturalLanguageCollectionMutationResult = collections.upsert(
-    NATURAL_LANGUAGE_COLLECTION_NAME,
-    null,
-    output.choices[0].message.content.trim(),
-  );
+  if (gitCommandIsInCollection) {
+    return {
+      naturalLanguage: output.choices[0].message.content.trim(),
+      naturalLanguageCollectionMutationResult: null,
+      gitCommandCollectionMutationResult: null,
+    };
+  } else {
+    const naturalLanguageCollectionMutationResult = collections.upsert(
+      NATURAL_LANGUAGE_COLLECTION_NAME,
+      null,
+      output.choices[0].message.content.trim(),
+    );
 
-  const gitCommandCollectionMutationResult = collections.upsert(
-    GIT_COMMAND_COLLECTION_NAME,
-    null,
-    gitCommand,
-  );
+    const gitCommandCollectionMutationResult = collections.upsert(
+      GIT_COMMAND_COLLECTION_NAME,
+      null,
+      gitCommand,
+    );
 
-  return {
-    naturalLanguage: output.choices[0].message.content.trim(),
-    naturalLanguageCollectionMutationResult:
-      naturalLanguageCollectionMutationResult,
-    gitCommandCollectionMutationResult: gitCommandCollectionMutationResult,
-  };
+    return {
+      naturalLanguage: output.choices[0].message.content.trim(),
+      naturalLanguageCollectionMutationResult:
+        naturalLanguageCollectionMutationResult,
+      gitCommandCollectionMutationResult: gitCommandCollectionMutationResult,
+    };
+  }
 }

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { gql, useLazyQuery } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, CircleDotDashed, Clipboard, Loader } from "lucide-react";
@@ -33,11 +34,18 @@ const FormSchema = z.object({
 });
 
 export default function SQL() {
+  const searchParams = useSearchParams();
   const { toast } = useToast();
   const [reordered, setReordered] = useState(false); // natural -> regex (true), meaning not reordered
   const [naturalLanguage, setNaturalLanguage] = useState("");
   const [sqlQuery, setSQLQuery] = useState("");
   const [copied, setCopied] = useState(false);
+  const [existsInCollection, setExistsInCollection] = useState(false);
+
+  // used to check if the user was navigated from the /search route (has parameters)
+  // If so, the SQL query is already in the Modus Collection and need
+  // not be added again, to prevent duplicate items in collection
+  let sqlInParams: string | null;
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -46,6 +54,19 @@ export default function SQL() {
       sqlQuery: sqlQuery,
     },
   });
+
+  useEffect(() => {
+    sqlInParams = searchParams.get("sql");
+    if (sqlInParams == null) {
+      return;
+    } else {
+      setReordered(true);
+      setSQLQuery(sqlInParams);
+      setExistsInCollection(true);
+      form.setValue("sqlQuery", sqlInParams);
+      setNaturalLanguage("");
+    }
+  }, []);
 
   const handleCopy = async (type: string) => {
     const naturalLanguageText = form.getValues("naturalLanguage");
@@ -96,10 +117,12 @@ export default function SQL() {
     query ConvertSQLQueryToNaturalLanguage(
       $instruction: String!
       $sqlQuery: String!
+      $sqlQueryIsInCollection: Boolean!
     ) {
       convertSQLQueryToNaturalLanguage(
         instruction: $instruction
         sqlQuery: $sqlQuery
+        sqlQueryIsInCollection: $sqlQueryIsInCollection
       ) {
         naturalLanguage
         naturalLanguageCollectionMutationResult {
@@ -147,6 +170,7 @@ export default function SQL() {
     variables: {
       instruction: sqlQueryToNaturalLanguageInstruction,
       sqlQuery: sqlQuery || "",
+      sqlQueryIsInCollection: existsInCollection,
     },
     onCompleted: (data) => {
       console.log("Data on fetch (git command to nlp): ", data);

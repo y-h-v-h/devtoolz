@@ -6,6 +6,7 @@ export const NATURAL_LANGUAGE_COLLECTION_NAME = "nlp-collection";
 export const REGEX_COLLECTION_NAME = "regex-collection";
 export const GIT_COMMAND_COLLECTION_NAME = "git-collection";
 export const SQL_QUERY_COLLECTION_NAME = "sql-collection";
+export const DEFAULT_SEARCH_METHOD = "default";
 
 // textarea:not([class]):not([style*='display:table']):not([style*='display:table-row-group'])[id][rows='6'][cols='2']
 

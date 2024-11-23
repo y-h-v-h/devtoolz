@@ -9,11 +9,13 @@ export class NaturalLanguageToRegexResult {
 
 
   @alias("natural-language-collection-mutation-result")
-  naturalLanguageCollectionMutationResult!: collections.CollectionMutationResult;
+  naturalLanguageCollectionMutationResult: collections.CollectionMutationResult | null =
+    null;
 
 
   @alias("regex-collection-mutation-result")
-  regexCollectionMutationResult!: collections.CollectionMutationResult;
+  regexCollectionMutationResult: collections.CollectionMutationResult | null =
+    null;
 }
 
 
@@ -25,11 +27,13 @@ export class RegexToNaturalLanguageResult {
 
 
   @alias("natural-language-collection-mutation-result")
-  naturalLanguageCollectionMutationResult!: collections.CollectionMutationResult;
+  naturalLanguageCollectionMutationResult: collections.CollectionMutationResult | null =
+    null;
 
 
   @alias("regex-collection-mutation-result")
-  regexCollectionMutationResult!: collections.CollectionMutationResult;
+  regexCollectionMutationResult: collections.CollectionMutationResult | null =
+    null;
 }
 
 // GIT
@@ -40,11 +44,13 @@ export class NaturalLanguageToGitCommandResult {
 
 
   @alias("natural-language-collection-mutation-result")
-  naturalLanguageCollectionMutationResult!: collections.CollectionMutationResult;
+  naturalLanguageCollectionMutationResult: collections.CollectionMutationResult | null =
+    null;
 
 
   @alias("git-command-collection-mutation-result")
-  gitCommandCollectionMutationResult!: collections.CollectionMutationResult;
+  gitCommandCollectionMutationResult: collections.CollectionMutationResult | null =
+    null;
 }
 
 
@@ -56,11 +62,13 @@ export class GitCommandToNaturalLanguageResult {
 
 
   @alias("natural-language-collection-mutation-result")
-  naturalLanguageCollectionMutationResult!: collections.CollectionMutationResult;
+  naturalLanguageCollectionMutationResult: collections.CollectionMutationResult | null =
+    null;
 
 
   @alias("git-command-collection-mutation-result")
-  gitCommandCollectionMutationResult!: collections.CollectionMutationResult;
+  gitCommandCollectionMutationResult: collections.CollectionMutationResult | null =
+    null;
 }
 
 // SQL
@@ -72,11 +80,13 @@ export class NaturalLanguageToSQLQueryResult {
 
 
   @alias("natural-language-collection-mutation-result")
-  naturalLanguageCollectionMutationResult!: collections.CollectionMutationResult;
+  naturalLanguageCollectionMutationResult: collections.CollectionMutationResult | null =
+    null;
 
 
   @alias("sql-query-collection-mutation-result")
-  sqlQueryCollectionMutationResult!: collections.CollectionMutationResult;
+  sqlQueryCollectionMutationResult: collections.CollectionMutationResult | null =
+    null;
 }
 
 
@@ -88,9 +98,11 @@ export class SQLQueryToNaturalLanguageResult {
 
 
   @alias("natural-language-collection-mutation-result")
-  naturalLanguageCollectionMutationResult!: collections.CollectionMutationResult;
+  naturalLanguageCollectionMutationResult: collections.CollectionMutationResult | null =
+    null;
 
 
   @alias("sql-query-collection-mutation-result")
-  sqlQueryCollectionMutationResult!: collections.CollectionMutationResult;
+  sqlQueryCollectionMutationResult: collections.CollectionMutationResult | null =
+    null;
 }

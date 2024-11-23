@@ -64,6 +64,7 @@ export function convertNaturalLanguageToRegex(
 export function convertRegexToNaturalLanguage(
   instruction: string,
   regex: string,
+  regexIsInCollection: bool,
 ): RegexToNaturalLanguageResult {
   const model = models.getModel<OpenAIChatModel>(SECOND_MODEL_NAME);
   const input = model.createInput([
@@ -81,22 +82,30 @@ export function convertRegexToNaturalLanguage(
   input.temperature = 0.7;
   const output = model.invoke(input);
 
-  const naturalLanguageCollectionMutationResult = collections.upsert(
-    NATURAL_LANGUAGE_COLLECTION_NAME,
-    null,
-    output.choices[0].message.content.trim(),
-  );
+  if (regexIsInCollection) {
+    return {
+      naturalLanguage: output.choices[0].message.content.trim(),
+      naturalLanguageCollectionMutationResult: null,
+      regexCollectionMutationResult: null,
+    };
+  } else {
+    const naturalLanguageCollectionMutationResult = collections.upsert(
+      NATURAL_LANGUAGE_COLLECTION_NAME,
+      null,
+      output.choices[0].message.content.trim(),
+    );
 
-  const regexCollectionMutationResult = collections.upsert(
-    REGEX_COLLECTION_NAME,
-    null,
-    regex,
-  );
+    const regexCollectionMutationResult = collections.upsert(
+      REGEX_COLLECTION_NAME,
+      null,
+      regex,
+    );
 
-  return {
-    naturalLanguage: output.choices[0].message.content.trim(),
-    naturalLanguageCollectionMutationResult:
-      naturalLanguageCollectionMutationResult,
-    regexCollectionMutationResult: regexCollectionMutationResult,
-  };
+    return {
+      naturalLanguage: output.choices[0].message.content.trim(),
+      naturalLanguageCollectionMutationResult:
+        naturalLanguageCollectionMutationResult,
+      regexCollectionMutationResult: regexCollectionMutationResult,
+    };
+  }
 }

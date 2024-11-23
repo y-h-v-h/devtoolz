@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { gql, useLazyQuery } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, CircleDotDashed, Clipboard, Loader } from "lucide-react";
@@ -22,14 +23,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import Header from "@/components/header";
 import Settings from "@/components/settings";
@@ -40,11 +33,18 @@ const FormSchema = z.object({
 });
 
 export default function Git() {
+  const searchParams = useSearchParams();
   const { toast } = useToast();
   const [reordered, setReordered] = useState(false); // natural -> regex (true), meaning not reordered
   const [naturalLanguage, setNaturalLanguage] = useState("");
   const [gitCommand, setGitCommand] = useState("");
   const [copied, setCopied] = useState(false);
+  const [existsInCollection, setExistsInCollection] = useState(false);
+
+  // used to check if the user was navigated from the /search route (has parameters)
+  // If so, the git command is already in the Modus Collection and need
+  // not be added again, to prevent duplicate items in collection
+  let gitCommandInParams: string | null;
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -53,6 +53,19 @@ export default function Git() {
       gitCommand: gitCommand,
     },
   });
+
+  useEffect(() => {
+    gitCommandInParams = searchParams.get("git");
+    if (gitCommandInParams == null) {
+      return;
+    } else {
+      setReordered(true);
+      setGitCommand(gitCommandInParams);
+      setExistsInCollection(true);
+      form.setValue("gitCommand", gitCommandInParams);
+      setNaturalLanguage("");
+    }
+  }, []);
 
   const handleCopy = async (type: string) => {
     const naturalLanguageText = form.getValues("naturalLanguage");
@@ -103,10 +116,12 @@ export default function Git() {
     query ConvertGitCommandToNaturalLanguage(
       $instruction: String!
       $gitCommand: String!
+      $gitCommandIsInCollection: Boolean!
     ) {
       convertGitCommandToNaturalLanguage(
         instruction: $instruction
         gitCommand: $gitCommand
+        gitCommandIsInCollection: $gitCommandIsInCollection
       ) {
         naturalLanguage
         naturalLanguageCollectionMutationResult {
@@ -154,6 +169,7 @@ export default function Git() {
     variables: {
       instruction: gitCommandToNaturalLanguageInstruction,
       gitCommand: gitCommand || "",
+      gitCommandIsInCollection: existsInCollection,
     },
     onCompleted: (data) => {
       console.log("Data on fetch (git command to nlp): ", data);
