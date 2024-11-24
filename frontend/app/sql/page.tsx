@@ -337,15 +337,7 @@ export default function SQL() {
         </section>
 
         {/* second section */}
-        <section className="relative shrink-0 overflow-hidden px-6 pb-10 lg:w-[400px] lg:min-w-[400px] lg:px-12 lg:py-14 xl:w-[500px]">
-          <h3 className="text-lg">Explanation</h3>
-          <p className="py-2 text-sm leading-8 text-zinc-500">
-            17 years together no way Seymour is missing out on some oven fried
-            Catfish. He will stay with the food start to finish. He’s in kitchen
-            right now watching it cook. The first of many he is very
-            sophisticated.
-          </p>
-        </section>
+        {/* <section className="relative shrink-0 overflow-hidden px-6 pb-10 lg:w-[400px] lg:min-w-[400px] lg:px-12 lg:py-14 xl:w-[500px]"></section> */}
       </section>
     </Form>
   );
