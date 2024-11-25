@@ -50,7 +50,7 @@ git clone https://github.com/y-h-v-h/devtoolz.git
 - follow [this](https://docs.hypermode.com/modus/search#develop-locally-with-collections) guide to set up your database for collections
 
 - `cd` into the `frontend` directory and run with `npm run dev`
-- `cd` into the `devtoolz-api` directory and run with `modus dev` NB: when running the backend, make sure you run it in the same terminal instance you run the docker in (step 3)
+- Clone [backend](https://github.com/y-h-v-h/devtoolz-api/), install all packages and `cd` into the directory run with `modus dev` NB: when running the backend, make sure you run it in the same terminal instance you run the docker in (step 3)
 
 - To view the project open `http://localhost:3000`.
 
