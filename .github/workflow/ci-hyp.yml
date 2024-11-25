@@ -1,4 +1,4 @@
-name: ci-modus-build
+name: ci-hypermode-functions
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ on:
       - main
 
 env:
-  MODUS_DIR: "../../devtoolz-api/"
+  MODUS_DIR: ""
 
 permissions:
   contents: read
