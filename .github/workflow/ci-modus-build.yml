@@ -8,7 +8,7 @@ on:
       - main
 
 env:
-  MODUS_DIR: ""
+  MODUS_DIR: "../../devtoolz-api/"
 
 permissions:
   contents: read
