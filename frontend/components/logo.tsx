@@ -7,11 +7,11 @@ export default function Logo() {
     <div className="flex">
       {/* <Wrench size={32} /> */}
       <div className="ml- flex flex-col">
-        <h2 className="text-brand text-xl font-black uppercase">dev2oolz</h2>
+        <h2 className="text-xl font-black uppercase text-brand">devtoolz</h2>
         <p className="text-zinc-500">
           by{" "}
           <a
-            href="https://github.com/lucky-chap"
+            href="https://github.com/y-h-v-h"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-white"
@@ -20,7 +20,7 @@ export default function Logo() {
           </a>{" "}
           on{" "}
           <a
-            href="https://github.com/lucky-chap/2oolz"
+            href="https://github.com/y-h-v-h/devtoolz"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-white"

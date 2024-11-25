@@ -15,39 +15,32 @@ const JetBrainsMono = localFont({
 export const metadata: Metadata = {
   title: "Devtoolz",
   generator: "Next.js",
-  applicationName: "2oolz",
+  applicationName: "Devtoolz",
   referrer: "origin-when-cross-origin",
-  keywords: [
-    "Next.js",
-    "React",
-    "JavaScript",
-    "Boilerplate",
-    "Template",
-    "shadcn-ui",
-  ],
+  keywords: ["Next.js", "React", "JavaScript"],
   alternates: {},
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://2oolz.vercel.app"),
+  metadataBase: new URL("https://devtoolz-app.vercel.app"),
   openGraph: {
-    title: "200lz",
-    description: "2oolz for you",
-    url: "https://2oolz.vercel.app",
-    siteName: "2oolz",
+    title: "devtoolz-app",
+    description: "Devtools for you",
+    url: "https://devtoolz-app.vercel.app",
+    siteName: "devtoolz-app",
     images: [
       {
-        url: "https://2oolz.vercel.app/og.png",
+        url: "https://devtoolz-app.vercel.app/og.png",
         width: 800,
         height: 600,
       },
       {
-        url: "https://2oolz.vercel.app/og-dark.png",
+        url: "https://devtoolz-app.vercel.app/og-dark.png",
         width: 1800,
         height: 1600,
-        alt: "Next.js, TailwindCSS and shadcn-ui Starter Template",
+        alt: "Devtools for developers",
       },
     ],
     locale: "en-US",
@@ -67,7 +60,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${JetBrainsMono.className}`}>
         <Provider attribute="class" defaultTheme="system" enableSystem>
-          <main className={`min-h-screen bg-[#111113] text-xs text-zinc-300`}>
+          <main
+            className={`app min-h-screen bg-[#111113] text-xs text-zinc-300`}
+          >
             {children}
           </main>
         </Provider>
