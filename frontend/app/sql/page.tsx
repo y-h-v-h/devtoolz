@@ -143,9 +143,8 @@ export default function SQL() {
     }
   `;
 
-  const [convertNaturalLanguageSQLQuery, { loading, data }] = useLazyQuery(
-    naturalLanguageToSQLQuery,
-    {
+  const [convertNaturalLanguageSQLQuery, { loading, error, data }] =
+    useLazyQuery(naturalLanguageToSQLQuery, {
       skipPollAttempt: () => reordered, // if any weird behavior, try removing this
       variables: {
         instruction: naturalLanguageToSQLQueryInstruction,
@@ -153,18 +152,18 @@ export default function SQL() {
       },
 
       onCompleted: (data) => {
-        console.log("Data on fetch (nlp to git command): ", data);
+        console.log("Data on fetch (nlp to git sql query): ", data);
+        console.log("Error on fetch (nlp to sql query): ", error);
         form.setValue(
           "sqlQuery",
           data.convertNaturalLanguageToSQLQuery.sqlQuery
         );
       },
-    }
-  );
+    });
 
   const [
     convertsqlQueryToNaturalLanguage,
-    { loading: sqlQueryLoading, data: sqlQueryData },
+    { loading: sqlQueryLoading, error: sqlError, data: sqlQueryData },
   ] = useLazyQuery(sqlToNaturalLanguageQuery, {
     skipPollAttempt: () => !reordered,
     variables: {
@@ -173,7 +172,8 @@ export default function SQL() {
       sqlQueryIsInCollection: existsInCollection,
     },
     onCompleted: (data) => {
-      console.log("Data on fetch (git command to nlp): ", data);
+      console.log("Data on fetch (sql query to nlp): ", data);
+      console.log("Error on fetch (sql query to nlp): ", sqlError);
       form.setValue(
         "naturalLanguage",
         data.convertSQLQueryToNaturalLanguage.naturalLanguage

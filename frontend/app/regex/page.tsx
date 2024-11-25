@@ -140,7 +140,7 @@ export default function Regex() {
     }
   `;
 
-  const [convertNaturalLanguageToRegex, { loading, data }] = useLazyQuery(
+  const [convertNaturalLanguageToRegex, { loading, error, data }] = useLazyQuery(
     naturalLanguageToRegexQuery,
     {
       skipPollAttempt: () => reordered, // if any weird behavior, try removing this
@@ -151,6 +151,7 @@ export default function Regex() {
 
       onCompleted: (data) => {
         console.log("Data on fetch (nlp to regex): ", data);
+        console.log("Error on fetch (nlp to regex): ", error);
         form.setValue("regex", data.convertNaturalLanguageToRegex.regex);
       },
     }
@@ -158,7 +159,7 @@ export default function Regex() {
 
   const [
     convertRegexToNaturalLanguage,
-    { loading: regexLoading, data: regexData },
+    { loading: regexLoading, error: regexError, data: regexData },
   ] = useLazyQuery(regexToNaturalLanguageQuery, {
     skipPollAttempt: () => !reordered,
     variables: {
@@ -168,6 +169,7 @@ export default function Regex() {
     },
     onCompleted: (data) => {
       console.log("Data on fetch (regex to nlp): ", data);
+      console.log("Error on fetch (regex to nlp): ", regexError);
       form.setValue(
         "naturalLanguage",
         data.convertRegexToNaturalLanguage.naturalLanguage

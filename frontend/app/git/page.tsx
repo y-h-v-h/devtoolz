@@ -142,9 +142,8 @@ export default function Git() {
     }
   `;
 
-  const [convertNaturalLanguageToGitCommand, { loading, data }] = useLazyQuery(
-    naturalLanguageToGitCommandQuery,
-    {
+  const [convertNaturalLanguageToGitCommand, { loading, error, data }] =
+    useLazyQuery(naturalLanguageToGitCommandQuery, {
       skipPollAttempt: () => reordered, // if any weird behavior, try removing this
       variables: {
         instruction: naturalLanguageToGitCommandInstruction,
@@ -153,17 +152,17 @@ export default function Git() {
 
       onCompleted: (data) => {
         console.log("Data on fetch (nlp to git command): ", data);
+        console.log("Error on fetch (nlp to git command): ", error);
         form.setValue(
           "gitCommand",
           data.convertNaturalLanguageToGitCommand.gitCommand
         );
       },
-    }
-  );
+    });
 
   const [
     convertGitCommandToNaturalLanguage,
-    { loading: gitCommandLoading, data: gitCommandResult },
+    { loading: gitCommandLoading, error: gitError, data: gitCommandResult },
   ] = useLazyQuery(gitCommandToNaturalLanguageQuery, {
     skipPollAttempt: () => !reordered,
     variables: {
@@ -173,6 +172,7 @@ export default function Git() {
     },
     onCompleted: (data) => {
       console.log("Data on fetch (git command to nlp): ", data);
+      console.log("Error on fetch (git command to nlp): ", gitError);
       form.setValue(
         "naturalLanguage",
         data.convertGitCommandToNaturalLanguage.naturalLanguage

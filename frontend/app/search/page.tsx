@@ -70,6 +70,7 @@ export default function SearchPage() {
     },
     onCompleted: (data) => {
       console.log("Search results", data);
+      console.log("Search error", error);
       if (data.search.status !== "success") {
         toast({
           variant: "destructive",
