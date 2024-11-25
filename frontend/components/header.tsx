@@ -12,8 +12,8 @@ export default function Header() {
       <Link href={"/"}>
         <Logo />
       </Link>
-      <div className="w-full">
-        <div className="mx-auto max-w-md">
+      <div className="md:w-full">
+        <div className="md:mx-auto md:max-w-md">
           <Nav />
         </div>
       </div>

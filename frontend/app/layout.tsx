@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   generator: "Next.js",
   applicationName: "Devtoolz",
   referrer: "origin-when-cross-origin",
-  keywords: ["Next.js", "React", "JavaScript"],
+  keywords: ["Next.js", "Modus", "HyperMode"],
   alternates: {},
   formatDetection: {
     email: false,
@@ -30,15 +30,9 @@ export const metadata: Metadata = {
     siteName: "devtoolz-app",
     images: [
       {
-        url: "https://devtoolz-app.vercel.app/og.png",
+        url: "https://devtoolz-app.vercel.app/devtoolz.png",
         width: 800,
         height: 600,
-      },
-      {
-        url: "https://devtoolz-app.vercel.app/og-dark.png",
-        width: 1800,
-        height: 1600,
-        alt: "Devtools for developers",
       },
     ],
     locale: "en-US",

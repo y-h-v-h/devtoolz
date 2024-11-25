@@ -35,7 +35,10 @@
 - **Natural language to SQL query converter**
 - **Vector search with Modus collections**
 
-## running locally
+## Running locally
+
+**NB**: Make sure you set up your backend here before running the frontend
+Set up the backend here [https://github.com/y-h-v-h/devtoolz-api](https://github.com/y-h-v-h/devtoolz-api)
 
 - Clone the app and `cd` into the root directory.
 
@@ -45,12 +48,9 @@ git clone https://github.com/y-h-v-h/devtoolz.git
 
 - `cd` into the `frontend` directory and install with `npm` or any other package manager
 
-- `cd` into the `devtoolz-api` directory and install with `npm` or any other package manager
+- Fill the necessary `env` variables using `.env.example`
 
-- follow [this](https://docs.hypermode.com/modus/search#develop-locally-with-collections) guide to set up your database for collections
-
-- `cd` into the `frontend` directory and run with `npm run dev`
-- Clone [backend](https://github.com/y-h-v-h/devtoolz-api/), install all packages and `cd` into the directory run with `modus dev` NB: when running the backend, make sure you run it in the same terminal instance you run the docker in (step 3)
+- Run `npm run dev` to start the app.
 
 - To view the project open `http://localhost:3000`.
 

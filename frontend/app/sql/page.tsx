@@ -336,8 +336,7 @@ export default function SQL() {
           </form>
         </section>
 
-        {/* second section */}
-        {/* <section className="relative shrink-0 overflow-hidden px-6 pb-10 lg:w-[400px] lg:min-w-[400px] lg:px-12 lg:py-14 xl:w-[500px]"></section> */}
+        {/* <section className="relative my-20 shrink-0 overflow-hidden px-6 pb-10 lg:my-0 lg:w-[400px] lg:min-w-[400px] lg:px-12 lg:py-14 xl:w-[500px]"></section> */}
       </section>
     </Form>
   );
