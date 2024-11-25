@@ -1,9 +1,7 @@
 import "./globals.css";
 
 import type { Metadata } from "next";
-import { JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
-import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
 
 import { Provider } from "@/components/provider";
 
