@@ -8,8 +8,7 @@ import {
   SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support";
 
-const URI =
-  process.env.NEXT_PUBLIC_APOLLO_URI || "http://localhost:8686/graphql";
+const URI = process.env.NEXT_PUBLIC_APOLLO_URI;
 
 function makeClient() {
   const httpLink = new HttpLink({

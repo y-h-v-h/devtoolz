@@ -62,24 +62,28 @@ export default function SearchPage() {
     }
   `;
 
-  const [search, { loading, error, data }] = useLazyQuery(searchQuery, {
-    variables: {
-      text: searchTerm,
-      collection: collection,
-      maxItems: 10,
-    },
-    onCompleted: (data) => {
-      console.log("Search results", data);
-      console.log("Search error", error);
-      if (data.search.status !== "success") {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: `${data.search.error}`,
-        });
-      }
-    },
-  });
+  const [search, { loading, error, data: searchData }] = useLazyQuery(
+    searchQuery,
+    {
+      skipPollAttempt: () => true,
+      variables: {
+        text: searchTerm,
+        collection: collection,
+        maxItems: 10,
+      },
+      onCompleted: (data) => {
+        console.log("Search results", data);
+        console.log("Search error", error);
+        if (data.search.status !== "success") {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: `${data.search.error}`,
+          });
+        }
+      },
+    }
+  );
 
   const handleSearch = async () => {
     if (searchTerm.trim().length === 0) {
@@ -182,11 +186,20 @@ export default function SearchPage() {
           <h4 className="mb-5 flex items-center text-lg text-zinc-500">
             <span className="mr-2">Search results</span>
           </h4>
-          {!loading && data && data.search && data.search.objects.length > 0 ? (
+          {!loading &&
+          searchData &&
+          searchData.search &&
+          searchData.search.objects.length > 0 ? (
             <div className="grid flex-col gap-5 sm:grid-cols-2">
-              {data.search.objects.map((item: SearchItemType, i: number) => (
-                <SearchItem key={i} text={item.text} collection={collection} />
-              ))}
+              {searchData.search.objects.map(
+                (item: SearchItemType, i: number) => (
+                  <SearchItem
+                    key={i}
+                    text={item.text}
+                    collection={collection}
+                  />
+                )
+              )}
             </div>
           ) : (
             <div className="flex h-96 w-full items-center justify-center">

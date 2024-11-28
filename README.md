@@ -33,7 +33,7 @@
 - **Natural language to git command converter**
 - **SQL query to natural language converter**
 - **Natural language to SQL query converter**
-- **Vector search with Modus collections**
+- **Semantic similarity search**
 
 ## Running locally
 
