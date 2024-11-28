@@ -145,6 +145,12 @@ export default function SQL() {
 
   const [convertNaturalLanguageSQLQuery, { loading, error, data }] =
     useLazyQuery(naturalLanguageToSQLQuery, {
+      context: {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_HYPERMODE_API_KEY}`,
+        },
+      },
       skipPollAttempt: () => reordered, // if any weird behavior, try removing this
       variables: {
         instruction: naturalLanguageToSQLQueryInstruction,
@@ -165,6 +171,12 @@ export default function SQL() {
     convertsqlQueryToNaturalLanguage,
     { loading: sqlQueryLoading, error: sqlError, data: sqlQueryData },
   ] = useLazyQuery(sqlToNaturalLanguageQuery, {
+    context: {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_HYPERMODE_API_KEY}`,
+      },
+    },
     skipPollAttempt: () => !reordered,
     variables: {
       instruction: sqlQueryToNaturalLanguageInstruction,

@@ -65,6 +65,12 @@ export default function SearchPage() {
   const [search, { loading, error, data: searchData }] = useLazyQuery(
     searchQuery,
     {
+      context: {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_HYPERMODE_API_KEY}`,
+        },
+      },
       skipPollAttempt: () => true,
       variables: {
         text: searchTerm,

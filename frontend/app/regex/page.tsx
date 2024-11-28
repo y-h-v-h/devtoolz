@@ -142,6 +142,12 @@ export default function Regex() {
 
   const [convertNaturalLanguageToRegex, { loading, error, data }] =
     useLazyQuery(naturalLanguageToRegexQuery, {
+      context: {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_HYPERMODE_API_KEY}`,
+        },
+      },
       skipPollAttempt: () => reordered, // if any weird behavior, try removing this
       variables: {
         instruction: naturalLanguageToRegexInstruction,
@@ -159,6 +165,12 @@ export default function Regex() {
     convertRegexToNaturalLanguage,
     { loading: regexLoading, error: regexError, data: regexData },
   ] = useLazyQuery(regexToNaturalLanguageQuery, {
+    context: {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_HYPERMODE_API_KEY}`,
+      },
+    },
     skipPollAttempt: () => !reordered,
     variables: {
       instruction: regexToNaturalLanguageInstruction,
