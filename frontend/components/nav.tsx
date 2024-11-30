@@ -14,6 +14,10 @@ import { Button } from "./ui/button";
 
 const links = [
   {
+    name: "Bash",
+    href: "/bash",
+  },
+  {
     name: "Regex",
     href: "/regex",
   },

@@ -302,7 +302,8 @@ export default function Git() {
                     </FormControl>
                     {!reordered ? (
                       <FormDescription className="text-center">
-                        NB: Verify git commands before using in production
+                        NB: Verify git commands before using in production in
+                        production
                       </FormDescription>
                     ) : (
                       <FormDescription className="text-center">

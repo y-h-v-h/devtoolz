@@ -36,7 +36,7 @@ export default function Home() {
             that make solving challenges faster, smarter, and easier with AI
           </p>
 
-          <Link href={"/regex"}>
+          <Link href={"/bash"}>
             <Button className="mx-auto mr-5 h-9 w-full max-w-2xl bg-brand text-black hover:bg-[#f8633b]">
               Get Started
             </Button>

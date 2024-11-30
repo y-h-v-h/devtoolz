@@ -1,16 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { gql, useLazyQuery } from "@apollo/client";
-import {
-  ArrowUpDown,
-  CircleDotDashed,
-  Key,
-  Loader,
-  Search,
-  SearchCheck,
-} from "lucide-react";
+import { Loader, Search } from "lucide-react";
 
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -23,10 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import Header from "@/components/header";
-import Logo from "@/components/logo";
-import Nav from "@/components/nav";
 import SearchItem from "@/components/search-item";
 
 type SearchItemType = {
@@ -149,16 +138,22 @@ export default function SearchPage() {
                       Natural Language
                     </SelectItem>
                     <SelectItem
-                      value="git-collection"
+                      value="bash-collection"
                       className="hover:bg-brand hover:text-black focus:bg-brand focus:text-black"
                     >
-                      Git Command
+                      Bash Command
                     </SelectItem>
                     <SelectItem
                       value="regex-collection"
                       className="hover:bg-brand hover:text-black focus:bg-brand focus:text-black"
                     >
                       Regex
+                    </SelectItem>
+                    <SelectItem
+                      value="git-collection"
+                      className="hover:bg-brand hover:text-black focus:bg-brand focus:text-black"
+                    >
+                      Git Command
                     </SelectItem>
                     <SelectItem
                       value="sql-collection"

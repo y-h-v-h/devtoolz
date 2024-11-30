@@ -9,8 +9,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import {
-  naturalLanguageToSQLQueryInstruction,
-  sqlQueryToNaturalLanguageInstruction,
+  bashToNaturalLanguageInstruction,
+  naturalLanguageToBashInstruction,
 } from "@/lib/model-instructions";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -23,60 +23,58 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import Header from "@/components/header";
 import Settings from "@/components/settings";
 
 const FormSchema = z.object({
   naturalLanguage: z.string().optional(),
-  sqlQuery: z.string().optional(),
+  bashCommand: z.string().optional(),
 });
 
-export default function SQL() {
+export default function Bash() {
   const searchParams = useSearchParams();
   const { toast } = useToast();
-  const [reordered, setReordered] = useState(false); // natural -> regex (true), meaning not reordered
+  const [reordered, setReordered] = useState(false); // natural -> bash (true), meaning not reordered
   const [naturalLanguage, setNaturalLanguage] = useState("");
-  const [sqlQuery, setSQLQuery] = useState("");
+  const [bashCommand, setBashCommand] = useState("");
   const [copied, setCopied] = useState(false);
   const [existsInCollection, setExistsInCollection] = useState(false);
 
   // used to check if the user was navigated from the /search route (has parameters)
-  // If so, the SQL query is already in the Modus Collection and need
+  // If so, the bash is already in the Modus Collection and need
   // not be added again, to prevent duplicate items in collection
-  let sqlInParams: string | null;
+  let bashInParams: string | null;
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       naturalLanguage: naturalLanguage,
-      sqlQuery: sqlQuery,
+      bashCommand: bashCommand,
     },
   });
 
   useEffect(() => {
-    sqlInParams = searchParams.get("sql");
-    if (sqlInParams == null) {
+    bashInParams = searchParams.get("bash");
+    if (bashInParams == null) {
       return;
     } else {
       setReordered(true);
-      setSQLQuery(sqlInParams);
+      setBashCommand(bashInParams);
       setExistsInCollection(true);
-      form.setValue("sqlQuery", sqlInParams);
+      form.setValue("bashCommand", bashInParams);
       setNaturalLanguage("");
     }
   }, []);
 
   const handleCopy = async (type: string) => {
     const naturalLanguageText = form.getValues("naturalLanguage");
-    const sqlQueryText = form.getValues("sqlQuery");
-    const text =
-      type === "naturalLanguage" ? naturalLanguageText : sqlQueryText;
+    const bashText = form.getValues("bashCommand");
+    const text = type === "naturalLanguage" ? naturalLanguageText : bashText;
     await navigator.clipboard.writeText(text || "").then(() => {
       toast({
         title: "Copied",
-        description: `${type == "naturalLanguage" ? "Natural language" : "SQL query"} copied to clipboard`,
+        description: `${type == "naturalLanguage" ? "Natural language" : "Bash command"} copied to clipboard`,
       });
       setCopied(true);
       setTimeout(() => {
@@ -84,17 +82,16 @@ export default function SQL() {
       }, 2000);
     });
   };
-
-  const naturalLanguageToSQLQuery = gql`
-    query ConvertSQLQueryToNaturalLanguage(
+  const naturalLanguageToBashQuery = gql`
+    query ConvertNaturalLanguageToBashCommand(
       $instruction: String!
       $naturalLanguage: String!
     ) {
-      convertNaturalLanguageToSQLQuery(
+      convertNaturalLanguageToBashCommand(
         instruction: $instruction
         naturalLanguage: $naturalLanguage
       ) {
-        sqlQuery
+        bashCommand
         naturalLanguageCollectionMutationResult {
           collection
           status
@@ -102,7 +99,7 @@ export default function SQL() {
           operation
           keys
         }
-        sqlQueryCollectionMutationResult {
+        bashCommandCollectionMutationResult {
           collection
           status
           error
@@ -113,16 +110,16 @@ export default function SQL() {
     }
   `;
 
-  const sqlToNaturalLanguageQuery = gql`
-    query ConvertSQLQueryToNaturalLanguage(
+  const bashCommandToNaturalLanguageQuery = gql`
+    query ConvertBashCommandToNaturalLanguage(
       $instruction: String!
-      $sqlQuery: String!
-      $sqlQueryIsInCollection: Boolean!
+      $bashCommand: String!
+      $bashCommandIsInCollection: Boolean!
     ) {
-      convertSQLQueryToNaturalLanguage(
+      convertBashCommandToNaturalLanguage(
         instruction: $instruction
-        sqlQuery: $sqlQuery
-        sqlQueryIsInCollection: $sqlQueryIsInCollection
+        bashCommand: $bashCommand
+        bashCommandIsInCollection: $bashCommandIsInCollection
       ) {
         naturalLanguage
         naturalLanguageCollectionMutationResult {
@@ -132,7 +129,7 @@ export default function SQL() {
           operation
           keys
         }
-        sqlQueryCollectionMutationResult {
+        bashCommandCollectionMutationResult {
           collection
           status
           error
@@ -143,8 +140,9 @@ export default function SQL() {
     }
   `;
 
-  const [convertNaturalLanguageSQLQuery, { loading, error, data }] =
-    useLazyQuery(naturalLanguageToSQLQuery, {
+  const [convertNaturalLanguageToBash, { loading, error, data }] = useLazyQuery(
+    naturalLanguageToBashQuery,
+    {
       context: {
         headers: {
           "Content-Type": "application/json",
@@ -153,24 +151,25 @@ export default function SQL() {
       },
       skipPollAttempt: () => reordered, // if any weird behavior, try removing this
       variables: {
-        instruction: naturalLanguageToSQLQueryInstruction,
+        instruction: naturalLanguageToBashInstruction,
         naturalLanguage: naturalLanguage || "",
       },
 
       onCompleted: (data) => {
-        console.log("Data on fetch (nlp to git sql query): ", data);
-        console.log("Error on fetch (nlp to sql query): ", error);
+        console.log("Data on fetch (nlp to bash): ", data);
+        console.log("Error on fetch (nlp to bash): ", error);
         form.setValue(
-          "sqlQuery",
-          data.convertNaturalLanguageToSQLQuery.sqlQuery
+          "bashCommand",
+          data.convertNaturalLanguageToBashCommand.bashCommand
         );
       },
-    });
+    }
+  );
 
   const [
-    convertsqlQueryToNaturalLanguage,
-    { loading: sqlQueryLoading, error: sqlError, data: sqlQueryData },
-  ] = useLazyQuery(sqlToNaturalLanguageQuery, {
+    convertBashCommandToNaturalLanguage,
+    { loading: bashLoading, error: bashError, data: bashData },
+  ] = useLazyQuery(bashCommandToNaturalLanguageQuery, {
     context: {
       headers: {
         "Content-Type": "application/json",
@@ -179,39 +178,42 @@ export default function SQL() {
     },
     skipPollAttempt: () => !reordered,
     variables: {
-      instruction: sqlQueryToNaturalLanguageInstruction,
-      sqlQuery: sqlQuery || "",
-      sqlQueryIsInCollection: existsInCollection,
+      instruction: bashToNaturalLanguageInstruction,
+      bashCommand: bashCommand || "",
+      bashCommandIsInCollection: existsInCollection,
     },
     onCompleted: (data) => {
-      console.log("Data on fetch (sql query to nlp): ", data);
-      console.log("Error on fetch (sql query to nlp): ", sqlError);
+      console.log("Data on fetch (bash to nlp): ", data);
+      console.log("Error on fetch (bash to nlp): ", bashError);
       form.setValue(
         "naturalLanguage",
-        data.convertSQLQueryToNaturalLanguage.naturalLanguage
+        data.convertBashCommandToNaturalLanguage.naturalLanguage
       );
     },
   });
 
   async function onSubmit(formData: z.infer<typeof FormSchema>) {
     if (reordered) {
-      console.log("Converting sql query to natural language");
-      setSQLQuery(formData.sqlQuery || "");
+      console.log("Converting bash to natural language");
+      setBashCommand(formData.bashCommand || "");
       form.setValue("naturalLanguage", "");
-      await convertsqlQueryToNaturalLanguage();
+      await convertBashCommandToNaturalLanguage();
     } else {
-      console.log("Converting natural language to sql query");
+      console.log("Converting natural language to bash");
       setNaturalLanguage(formData.naturalLanguage || "");
-      form.setValue("sqlQuery", "");
-      await convertNaturalLanguageSQLQuery();
+      form.setValue("bashCommand", "");
+      await convertNaturalLanguageToBash();
     }
   }
+
+  // trim user input before sending
 
   return (
     <Form {...form}>
       <section className="flex min-h-screen w-full flex-col items-stretch lg:flex-row">
         <section className="lg:pb- pb- flex min-w-0 flex-1 flex-col gap-8 border-r border-dashed border-r-zinc-800 bg-[#18181b] px-6 pt-10 lg:px-12">
           <Header />
+
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div
               className={`mx-auto flex w-full max-w-4xl flex-col ${reordered ? "flex-col-reverse" : ""}`}
@@ -245,7 +247,7 @@ export default function SQL() {
                       <Textarea
                         disabled={reordered || loading}
                         className="mt-4 h-48 max-h-48 min-h-48 w-full rounded-xl border-2 border-zinc-900 bg-zinc-800 focus-visible:ring-zinc-900 disabled:opacity-100"
-                        placeholder={`${reordered ? "Converted sql query in natural language" : "What you do you want to convert to an sql query?"}`}
+                        placeholder={`${reordered ? "Converted bash command in natural language" : "What you do you want to convert to a bash command?"}`}
                         rows={5}
                         cols={10}
                         {...field}
@@ -267,12 +269,12 @@ export default function SQL() {
 
               <FormField
                 control={form.control}
-                name="sqlQuery"
+                name="bashCommand"
                 render={({ field }) => (
                   <FormItem className="group relative flex flex-col">
                     <Button
                       type="button"
-                      onClick={() => handleCopy("sqlQuery")}
+                      onClick={() => handleCopy("bashCommand")}
                       variant={"ghost"}
                       size={"icon"}
                       className="group absolute right-5 top-14 transition-all duration-100 ease-linear hover:bg-[#18181b]"
@@ -289,12 +291,12 @@ export default function SQL() {
                         />
                       )}
                     </Button>
-                    <FormLabel className="text-sm">SQL Query</FormLabel>
+                    <FormLabel className="text-sm">Bash command</FormLabel>
                     <FormControl className="">
                       <Textarea
                         disabled={!reordered || loading}
                         className="mt-4 h-48 max-h-48 min-h-48 w-full rounded-xl border-2 border-zinc-900 bg-zinc-800 focus-visible:ring-zinc-900 disabled:opacity-100"
-                        placeholder={`${reordered ? "Your git sql query here" : "Output sql query"}`}
+                        placeholder={`${reordered ? "Your bash command code here" : "Output bash command"}`}
                         rows={5}
                         cols={10}
                         {...field}
@@ -302,8 +304,7 @@ export default function SQL() {
                     </FormControl>
                     {!reordered ? (
                       <FormDescription className="text-center">
-                        NB: Verify sql queries before using in production in
-                        production
+                        NB: Verify bash commands before using in production
                       </FormDescription>
                     ) : (
                       <FormDescription className="text-center">
@@ -319,15 +320,15 @@ export default function SQL() {
               {reordered ? (
                 <Button
                   type="submit"
-                  disabled={sqlQueryLoading}
+                  disabled={bashLoading}
                   className="mr-5 h-9 w-full bg-brand text-black hover:bg-[#f8633b]"
                 >
-                  {sqlQueryLoading ? (
+                  {bashLoading ? (
                     <Loader size={18} className="mr-2 animate-spin" />
                   ) : (
                     <CircleDotDashed size={18} className="mr-2" />
                   )}
-                  {sqlQueryLoading
+                  {bashLoading
                     ? "Converting..."
                     : "Convert to natural language"}
                 </Button>
@@ -342,13 +343,12 @@ export default function SQL() {
                   ) : (
                     <CircleDotDashed size={18} className="mr-2" />
                   )}
-                  {loading ? "Converting..." : "Convert to sql query"}
+                  {loading ? "Converting..." : "Convert to bash command"}
                 </Button>
               )}
             </div>
           </form>
         </section>
-
         {/* <section className="relative my-20 shrink-0 overflow-hidden px-6 pb-10 lg:my-0 lg:w-[400px] lg:min-w-[400px] lg:px-12 lg:py-14 xl:w-[500px]"></section> */}
       </section>
     </Form>

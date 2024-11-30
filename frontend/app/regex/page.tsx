@@ -299,7 +299,7 @@ export default function Regex() {
                     </FormControl>
                     {!reordered ? (
                       <FormDescription className="text-center">
-                        NB: Verify regex code before using
+                        NB: Verify regex code before using in production
                       </FormDescription>
                     ) : (
                       <FormDescription className="text-center">

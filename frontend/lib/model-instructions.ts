@@ -1,3 +1,8 @@
+export const naturalLanguageToBashInstruction =
+  "You are an accurate and reliable natural language to bash converter";
+export const bashToNaturalLanguageInstruction =
+  "You are an accurate and reliable bash to natural language converter";
+
 export const naturalLanguageToRegexInstruction =
   "You are an accurate and reliable natural language to regex converter";
 export const regexToNaturalLanguageInstruction =

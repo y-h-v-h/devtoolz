@@ -57,3 +57,7 @@ git clone https://github.com/y-h-v-h/devtoolz.git
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for more information.
+
+## TODO:
+
+- Load .env vars from api route
