@@ -27,13 +27,15 @@
 
 ## Features
 
+- **Bash command to natural language converter**
+- **Natural language to bash command converter**
 - **Regex to natural language converter**
 - **Natural language to regex converter**
 - **Git command to natural language converter**
 - **Natural language to git command converter**
 - **SQL query to natural language converter**
 - **Natural language to SQL query converter**
-- **Semantic similarity search**
+- **Natural language search**
 
 ## Running locally
 

@@ -19,6 +19,9 @@ export default function SearchItem({
 
   let type: string;
   switch (collection) {
+    case "bash-collection":
+      type = "bash";
+      break;
     case "regex-collection":
       type = "regex";
       break;
